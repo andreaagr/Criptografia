@@ -1,3 +1,5 @@
+package utils
+
 class MatrixHelper {
     fun printMatrix(matrix: Array<Array<Char>>) {
         for(row in matrix) {

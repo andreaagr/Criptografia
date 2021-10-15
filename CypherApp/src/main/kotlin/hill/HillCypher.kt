@@ -1,16 +1,24 @@
 package hill
 
-import MatrixHelper
+import utils.MatrixHelper
 
 class HillCypher {
     private var alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
     private val matrixHelper = MatrixHelper()
-    private val calculationHelper = CalculationHelper(matrixHelper)
+    private val calculationHelper = CalculationHelper()
 
-    fun encrypt(key: String, mcla: String): String {
-        val matrixOrder = doMeetRequirements(key, mcla)
+    fun hillAlgoritm(key: String, mclaOrCriptogram: String, isDecrypting: Boolean): String {
+        return if (isDecrypting) {
+            decrypt(key, mclaOrCriptogram)
+        } else {
+            encrypt(key, mclaOrCriptogram)
+        }
+    }
+
+    private fun encrypt(key: String, mcla: String): String {
+        val matrixOrder = doMeetRequirements(key)
         return if (matrixOrder > 0) {
-            val mArrays = createMArrays(mcla, matrixOrder)
+            val mArrays = createMArrays(fillMessageWithX(matrixOrder, mcla), matrixOrder)
             println("ARREGLOS M:\n")
             mArrays.forEachIndexed { index, array ->
                 println("M$index:")
@@ -22,19 +30,20 @@ class HillCypher {
             println()
             multiplyArrays(mArrays, kMatrix)
         } else {
-            parseError(matrixOrder)
+            println(parseError(matrixOrder))
+            mcla
         }
     }
 
-    //--------------------------------------------------------------------
-    fun decrypt(key: String, criptogram: String): String {
-        val matrixOrder = doMeetRequirements(key, criptogram)
+    private fun decrypt(key: String, criptogram: String): String {
+        val matrixOrder = doMeetRequirements(key)
         return if (matrixOrder > 0) {
-            val mArrays = createMArrays(criptogram, matrixOrder)
+            val mArrays = createMArrays(fillMessageWithX(matrixOrder, criptogram), matrixOrder)
             val kMatrix = createKMatrix(matrixOrder, key)
             println("\nMATRIZ ORIGINAL\n")
             matrixHelper.printMatrix(kMatrix)
             println()
+            // Calcular el inverso modular
             val modularInv = canDecryptCriptogram(kMatrix)
             // Transponer la matrix
             val kTInv = calculationHelper.createCofactorsMatrix(matrixHelper.transponeMatrix(kMatrix))
@@ -45,16 +54,15 @@ class HillCypher {
             matrixHelper.printMatrix(kInv)
             multiplyArrays(mArrays, kInv)
         } else {
-            parseError(matrixOrder)
+            println(parseError(matrixOrder))
+            criptogram
         }
     }
 
-    private fun doMeetRequirements(key: String, mclaOrCriptogram: String): Int {
+    private fun doMeetRequirements(key: String): Int {
         val matrixOrder = canCreateASquareMatrix(key)
         return if ( matrixOrder == -1) {
             -1
-        } else if (!canMultiplyData(matrixOrder, mclaOrCriptogram.length)) {
-            -2
         } else {
             matrixOrder
         }
@@ -63,7 +71,6 @@ class HillCypher {
     private fun parseError(code: Int): String{
         return when (code) {
             -1 -> "La clave no forma una matriz cuadrada"
-            -2 -> "Las matrices no pueden multiplicarse"
             else -> "Decode error"
         }
     }
@@ -121,17 +128,12 @@ class HillCypher {
         return -1
     }
 
-    private fun canMultiplyData(matrixOrder: Int, lengthMcla: Int): Boolean {
-        return lengthMcla % matrixOrder == 0
-    }
-
     private fun canDecryptCriptogram(kMatrix: Array<Array<Int>>): Int{
         var determinant = calculationHelper.calculateMatrixDeterminant(kMatrix)
         println("DETERMINANTE ANTES DE APLICARLE EL MÓDULO $determinant")
         determinant = determinant % alphabet.length
         println("DETERMINANTE DESPUÉS DE APLICARLE EL MÓDULO $determinant")
         val modularInv: Int
-        // Calcular determinante
         return if (determinant == 0) {
             -1
         } else {
@@ -143,6 +145,16 @@ class HillCypher {
             } else {
                 modularInv
             }
+        }
+    }
+
+    private fun fillMessageWithX(matrixOrder: Int, message: String): String {
+        val lengthMcla = message.length
+        val mod = lengthMcla % matrixOrder
+        return if (mod != 0) {
+            message.padEnd((matrixOrder - mod) + lengthMcla, 'X')
+        } else {
+            message
         }
     }
 }

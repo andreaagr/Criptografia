@@ -1,6 +1,6 @@
 package playfair
 
-import MatrixHelper
+import utils.MatrixHelper
 
 class PlayfairMatrixHelper() {
     private val matrix = Array(5) { Array(5) {'-'} }

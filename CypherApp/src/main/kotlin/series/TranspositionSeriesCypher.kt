@@ -5,7 +5,15 @@ class TranspositionSeriesCypher {
 
     private var availableIndices = mutableListOf<Int>()
 
-    fun encrypt(m: String, functions: List<List<Int>>): String {
+    fun startTransposicion(mclaOrCriptogram: String, functions: List<List<Int>>, isDecrypting: Boolean): String {
+        return if (isDecrypting) {
+            decrypt(mclaOrCriptogram, functions)
+        } else {
+            encrypt(mclaOrCriptogram, functions)
+        }
+    }
+
+    private fun encrypt(m: String, functions: List<List<Int>>): String {
         availableIndices = MutableList(m.length) { -1 }
         mcla = m.uppercase().replace(" ", "")
         var criptogram = ""
@@ -17,7 +25,7 @@ class TranspositionSeriesCypher {
         return criptogram
     }
 
-    fun decrypt(criptogram: String, functions: List<List<Int>>): String {
+    private fun decrypt(criptogram: String, functions: List<List<Int>>): String {
         mcla = criptogram.uppercase().replace(" ", "")
         val indices = mutableSetOf<Int>()
         functions.forEach { function ->

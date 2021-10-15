@@ -1,10 +1,9 @@
 package hill
 
-import MatrixHelper
 import kotlin.math.abs
 import kotlin.math.pow
 
-class CalculationHelper(matrixHelper: MatrixHelper) {
+class CalculationHelper {
 
     fun calculateMatrixDeterminant(kMatrix: Array<Array<Int>>): Int {
         var determinant = 0
@@ -27,7 +26,7 @@ class CalculationHelper(matrixHelper: MatrixHelper) {
             (matrix.indices).forEach { indexC ->
                 subResult = matrix[indexR][indexC] % mod
                 if (subResult < 0) {
-                    subResult = subResult + mod
+                    subResult += mod
                 }
                 result[indexR][indexC] = subResult
             }
@@ -115,8 +114,8 @@ class CalculationHelper(matrixHelper: MatrixHelper) {
         return ((matrix2x2[0][0]*matrix2x2[1][1]) - (matrix2x2[1][0]*matrix2x2[0][1]))*a
     }
     // ---------------------------------------------------------------------------------------------
+    // Algoritmo extendido de Euclides
     fun extendedEuclidesAlgoritm(determinant: Int, alphabetSize: Int = 27): Int {
-        // Algoritmo extendido de Euclides
         return if (determinant > alphabetSize) {
             getReverse(determinant, alphabetSize)
         } else {
