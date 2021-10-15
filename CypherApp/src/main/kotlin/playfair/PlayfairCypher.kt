@@ -1,5 +1,8 @@
 package playfair
 
+/**
+ * Clase con las reglas y métodos para aplicar el cifrado Playfair
+ * */
 class PlayfairCypher() {
     private val playfairFormatter = PlayfairFormatter()
 

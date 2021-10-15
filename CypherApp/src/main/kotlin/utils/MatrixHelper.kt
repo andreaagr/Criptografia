@@ -1,5 +1,8 @@
 package utils
 
+/**
+ * Esta clase compila algunas de las operaciones comunes en matrices
+ * */
 class MatrixHelper {
     fun printMatrix(matrix: Array<Array<Char>>) {
         for(row in matrix) {

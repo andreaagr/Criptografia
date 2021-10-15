@@ -2,6 +2,10 @@ package utils
 
 import java.io.File
 
+/**
+ * Esta clase nos permite realizar la lectura y escritura en archivos
+ * */
+
 class FileHelper {
     fun readFile(path: String): String {
         return try {

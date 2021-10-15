@@ -9,6 +9,9 @@ class CypherManager {
     private val transpositionSeriesCypher = TranspositionSeriesCypher()
     private val fileHelper = FileHelper()
 
+    /**
+     * Aplica el encriptado o desencriptado según el orden establecido por el proyecto
+     * */
     fun encryptOrDecrypt(
         isDecrypting: Boolean,
         mcla: String,
@@ -17,32 +20,49 @@ class CypherManager {
         functionData: List<Pair<Int,Int>>,
         path: String
     ) {
-        if (isDecrypting) {
-            println("DESENCRIPTANDO...")
-        } else {
-            println("ENCRIPTANDO...")
-        }
-        println("INICIA TRANSPOSICIÓN POR SERIES")
+        val seriesResult: String
+        val playfairResult: String
+        val hillResult: String
         val message = mcla.replace(" ", "")
         val functions = mutableListOf<List<Int>>()
         println("FUNCIONES:")
         for (values in functionData) {
             functions.add(transpositionSeriesCypher.createFunction(values.first, message.length, values.second))
         }
-        val seriesResult = transpositionSeriesCypher.startTransposicion(mcla, functions, isDecrypting)
-        println("RESULTADO: $seriesResult")
-        println("TERMINA TRANSPOSICIÓN POR SERIES")
 
-        println("INICIA CIFRADO HILL")
-        val hillResult = hillCypher.hillAlgoritm(hillKey, seriesResult, isDecrypting)
-        println("\nRESULTADO: $hillResult")
-        println("\nTERMINA CIFRADO HILL")
+        if (isDecrypting) {
+            println("DESENCRIPTANDO...")
+            println("INICIA PLAYFAIR")
+            playfairResult = playfairCypher.playfair(playfairKey, message, isDecrypting)
+            println("RESULTADO: $playfairResult")
+            println("TERMINA PLAYFAIR")
 
-        println("INICIA PLAYFAIR")
-        val playfairResult = playfairCypher.playfair(playfairKey,hillResult, isDecrypting)
-        println("RESULTADO: $playfairResult")
-        println("TERMINA PLAYFAIR")
+            println("INICIA DESCIFRADO HILL")
+            hillResult = hillCypher.decrypt(hillKey, playfairResult)
+            println("\nRESULTADO: $hillResult")
+            println("\nTERMINA CIFRADO HILL")
 
+            println("INICIA TRANSPOSICIÓN POR SERIES")
+            seriesResult = transpositionSeriesCypher.decrypt(mcla, functions)
+            println("RESULTADO: $seriesResult")
+            println("TERMINA TRANSPOSICIÓN POR SERIES")
+        } else {
+            println("ENCRIPTANDO...")
+            println("INICIA TRANSPOSICIÓN POR SERIES")
+            seriesResult = transpositionSeriesCypher.encrypt(mcla, functions)
+            println("RESULTADO: $seriesResult")
+            println("TERMINA TRANSPOSICIÓN POR SERIES")
+
+            println("INICIA CIFRADO HILL")
+            hillResult = hillCypher.encrypt(hillKey, seriesResult)
+            println("\nRESULTADO: $hillResult")
+            println("\nTERMINA CIFRADO HILL")
+
+            println("INICIA PLAYFAIR")
+            playfairResult = playfairCypher.playfair(playfairKey,hillResult, isDecrypting)
+            println("RESULTADO: $playfairResult")
+            println("TERMINA PLAYFAIR")
+        }
         fileHelper.writeFile(path, playfairResult)
     }
 }

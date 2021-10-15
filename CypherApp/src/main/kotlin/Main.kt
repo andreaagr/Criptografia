@@ -1,12 +1,21 @@
 import utils.FileHelper
 
+/**
+ * Proyecto 1
+ * Materia: Criptografía
+ * Integrantes:
+ *      -García Ramírez Irma
+ *      -García Ruiz Andrea
+ *      -Miranda Cortés Yak Balam
+ * */
+
 fun main() {
     val file = FileHelper()
     println("""
           __^__                                             __^__
          ( ___ )-------------------------------------------( ___ )
           | / |           CRIPTOGRAFÍA: PROYECTO 1          | \ |
-          | / |  TRANSPOSICIÓN POR SERIES, PLAYFAIR Y HILL  | \ |
+          | / |  TRANSPOSICIÓN POR SERIES, HILL Y PLAYFAIR  | \ |
           |___|                                             |___|     
           |___|                  EQUIPO 7                   |___|
           |___|                                             |___|   

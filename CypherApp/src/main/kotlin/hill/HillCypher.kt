@@ -2,20 +2,15 @@ package hill
 
 import utils.MatrixHelper
 
+/**
+ * Clase que contiene las reglas y métodos para aplicar el cifrado Hill
+ * */
 class HillCypher {
     private var alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
     private val matrixHelper = MatrixHelper()
     private val calculationHelper = CalculationHelper()
 
-    fun hillAlgoritm(key: String, mclaOrCriptogram: String, isDecrypting: Boolean): String {
-        return if (isDecrypting) {
-            decrypt(key, mclaOrCriptogram)
-        } else {
-            encrypt(key, mclaOrCriptogram)
-        }
-    }
-
-    private fun encrypt(key: String, mcla: String): String {
+    fun encrypt(key: String, mcla: String): String {
         val matrixOrder = doMeetRequirements(key)
         return if (matrixOrder > 0) {
             val mArrays = createMArrays(fillMessageWithX(matrixOrder, mcla), matrixOrder)
@@ -35,7 +30,7 @@ class HillCypher {
         }
     }
 
-    private fun decrypt(key: String, criptogram: String): String {
+    fun decrypt(key: String, criptogram: String): String {
         val matrixOrder = doMeetRequirements(key)
         return if (matrixOrder > 0) {
             val mArrays = createMArrays(fillMessageWithX(matrixOrder, criptogram), matrixOrder)

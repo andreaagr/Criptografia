@@ -2,6 +2,9 @@ package playfair
 
 import utils.MatrixHelper
 
+/**
+ * Clase que almacena las operaciones comunes dentro de la matriz Playfair
+ * **/
 class PlayfairMatrixHelper() {
     private val matrix = Array(5) { Array(5) {'-'} }
     private val matrixHelper = MatrixHelper()
@@ -79,10 +82,10 @@ class PlayfairMatrixHelper() {
             chunk.forEach { char ->
                 matrix[row][column] = char
                 alphabet = alphabet.replace(char, '-')
-                column = column + 1
+                column += 1
             }
             column = 0
-            row = row + 1
+            row += 1
         }
         alphabet = alphabet.filter {it -> it != '-'}
         return Pair(lastIndexChunk, chunks[lastIndexChunk].size - 1)

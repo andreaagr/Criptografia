@@ -1,19 +1,14 @@
 package series
 
+/**
+ * Clase utilizada para aplicar el cifrado por transposición de series
+ * */
 class TranspositionSeriesCypher {
     private var mcla = ""
 
     private var availableIndices = mutableListOf<Int>()
 
-    fun startTransposicion(mclaOrCriptogram: String, functions: List<List<Int>>, isDecrypting: Boolean): String {
-        return if (isDecrypting) {
-            decrypt(mclaOrCriptogram, functions)
-        } else {
-            encrypt(mclaOrCriptogram, functions)
-        }
-    }
-
-    private fun encrypt(m: String, functions: List<List<Int>>): String {
+    fun encrypt(m: String, functions: List<List<Int>>): String {
         availableIndices = MutableList(m.length) { -1 }
         mcla = m.uppercase().replace(" ", "")
         var criptogram = ""
@@ -25,7 +20,7 @@ class TranspositionSeriesCypher {
         return criptogram
     }
 
-    private fun decrypt(criptogram: String, functions: List<List<Int>>): String {
+    fun decrypt(criptogram: String, functions: List<List<Int>>): String {
         mcla = criptogram.uppercase().replace(" ", "")
         val indices = mutableSetOf<Int>()
         functions.forEach { function ->
@@ -36,6 +31,9 @@ class TranspositionSeriesCypher {
         return generateMcla(indices)
     }
 
+    /**
+     * Obtiene el mensaje real, partiendo del los índice
+     * */
     private fun generateMcla(indices: Set<Int>): String {
         var result = ""
         (mcla.indices).forEach { index ->
@@ -44,6 +42,9 @@ class TranspositionSeriesCypher {
         return result
     }
 
+    /**
+     * Genera el submensaje para la función indicada
+     * */
     private fun generateSubmessage(function: List<Int>): String {
         var submessage = ""
         function.forEach { index ->
@@ -56,6 +57,9 @@ class TranspositionSeriesCypher {
         return submessage
     }
 
+    /**
+     * Verifica si un número es primo o no
+     * */
     private fun isPrime(number: Int): Boolean {
         val divisors = mutableListOf<Int>()
         (1..number).forEach { divisor ->
@@ -66,6 +70,9 @@ class TranspositionSeriesCypher {
         return divisors.size == 2
     }
 
+    /**
+     * Genera las diferentes funciones que podrán ser utlizadas por el método
+     * */
     fun createFunction(type: Int, size: Int, multiple: Int = 1): List<Int> {
         return (1..size).filter { number ->
             when (type) {
