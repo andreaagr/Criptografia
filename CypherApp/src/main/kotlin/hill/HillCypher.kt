@@ -74,6 +74,10 @@ class HillCypher {
         var criptogram = ""
         var total = 0
         mArrays.forEach { mMatrix ->
+            println("MARRAY:")
+            println(mMatrix)
+            println("KMATRIX:")
+            matrixHelper.printMatrix(kMatrix)
             kMatrix.forEachIndexed { indexR, row ->
                 row.forEachIndexed { indexC, _ ->
                     val subtotal = (kMatrix[indexR][indexC] * mMatrix[indexC])
